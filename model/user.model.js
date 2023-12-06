@@ -1,0 +1,61 @@
+const mongoose = require("mongoose");
+
+const userSchema = new mongoose.Schema({
+  orgId: { type: mongoose.ObjectId },
+  superAdminId: { type: mongoose.ObjectId },
+  superAdminUniversalAccess:{type:Boolean,default:false},
+  familyId: { type: mongoose.ObjectId },
+  planId: { type: mongoose.ObjectId ,ref:'planSchema' },
+  empId: { type: String },
+  phoneNoVerified: { type: Boolean, required: true, default: false },
+  userName: { type: String },
+  dob: { type: Date },
+  doj: { type: Date },
+  fatherName: { type: String },
+  motherName: { type: String },
+  relationStatus: { type: String, enum: ['SINGLE', 'MARRIED', 'DIVORCED', 'WIDOWED',], default: 'SINGLE' },
+  spouseName: { type: String },
+  gender: { type: String, enum: ['M', 'F', 'T'] },
+  addressLineOne: { type: String },
+  addressLineTwo: { type: String },
+  pinCode: { type: String },
+  state: { type: String },
+  city: { type: String },
+  userphoneNumber: { type: String, sparse: true },
+  role: { type: String, required: true, default: 'EMP' ,
+          ref:'role'},
+  permissions:{type:Array,default:['view-EMP']},
+  phoneOtp: String,
+  userMail: { type: String, sparse: true },
+  mailOtp: String,
+  token: String,
+  userProfileImagePath:{type:String,default:null},
+  userJourneyStatus: { type: String },
+  wlsPath:{type:String},
+  adminEmpUploadFirstSet:{type:Boolean,enum:[true,false],default:false},
+  userStatus: { type: String, enum: ['ACTIVE', 'INACTIVE', 'PURGED', 'ARCHIVED'], default: 'ACTIVE' },
+  spouse:{type:Object,default:null},
+  childOne:{type:Object,default:null},
+  childTwo:{type:Object,default:null}
+  // spouseName: { type: String, default:null},
+  // spouseGender: { type: String, default:null},
+  // spouseDob: { type: Date, default:null},
+  // spouseDoj: { type: Date, default:null},
+  // child1Name: { type: String, default:null},
+  // child1Gender: { type: String, default:null},
+  // child1Dob: { type: Date, default:null},
+  // child1Doj: { type: Date, default:null},
+  // child2Name: { type: String, default:null},
+  // child2Gender: { type: String, default:null},
+  // child2Dob: { type: Date, default:null},
+  // child2Doj: { type: Date, default:null},
+}, { timestamps: true });
+
+userSchema.index({
+  userName: 1,
+  userphoneNumber: 1,
+  userMail: 1,
+});
+const User = mongoose.model('user', userSchema);
+User.createIndexes();
+module.exports = User;
